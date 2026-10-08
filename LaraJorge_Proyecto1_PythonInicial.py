@@ -100,7 +100,6 @@ while True:
                         for i in range(len(productos)):print(f"{i+1}. {productos[i][0]} - {productos[i][1]} - ${productos[i][2]}")
                         id_eliminar = validaInt("Numero de producto a eliminar: ",1)
                         posicion = id_eliminar - 1
-                        # ["algo",[nombre,categoria,precio]].pop(1) -> [nombre,categoria,precio]
                         eliminado = productos.pop(posicion)
                         print(f"se elimino el producto: {eliminado} ") 
 
