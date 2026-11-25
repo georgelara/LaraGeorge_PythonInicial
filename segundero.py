@@ -7,7 +7,6 @@ def delay(tiempo):
     Returns:
         Ninguno
     """
-
     for i in range(tiempo,0,-1):
         print(f"\r{i}", end="")
         time.sleep(1)

@@ -26,7 +26,7 @@ def validaStr(fraseIngreso:str, nuloAdmitido:int):
                 temp_Str = input(fraseIngreso).strip().lower()
             return temp_Str.lower() 
     
-def validaChar(fraseIngreso:str):
+def validaSN(fraseIngreso:str):
     """
     Valida que el usuario ingrese unicamente S o N, para confirmar actividad"
     Parameters:
@@ -66,7 +66,6 @@ def validaInt(fraseIngreso:str, minimo:int, maximo:int=0):
             segundero.delay(3)
             print("")
     return int(temp_Str)
-
 
 def validaFloat(fraseIngreso:str, minimo:int):
     """

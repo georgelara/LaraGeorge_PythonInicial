@@ -23,7 +23,7 @@ def pantallaPrincipal():
     print("-- 0. Salir")
     print("-"*30)
 
-def Edicion():
+def campos():
     """Muestra de Menu Principal
     Parameters:
         Ninguno
@@ -33,7 +33,7 @@ def Edicion():
     os.system('cls')
     print("="*40) # <-  ==================================
     print(#Fore.CYAN + 
-        "Seleccione que Dato desea modificar")
+        "Seleccione que Dato desea trabajar")
     print("="*40) # <-  ==================================
     #print("-"*30)
     print("-- 1. Nombre. ")
