@@ -1,5 +1,5 @@
 import validadores, menu, inventario
-inventario.crearDB()#menu del programador...Unica ejecucion o usar para autodestruccion.
+inventario.crearDB()
 while True:
     menu.pantallaPrincipal()
     match validadores.validaInt("Indique la tarea que desea realizar: ",-1,7):

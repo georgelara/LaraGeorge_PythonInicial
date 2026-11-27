@@ -1,4 +1,5 @@
 import validadores,segundero,sqlite3, menu, os
+campos_tabla=()
 def crearDB():
     """Creacion de la Tabla Productos en invertario.db
     Parameters:
@@ -37,7 +38,7 @@ def crearDB():
         productos.append(["Calular Samsung s23+","Celular",12,1800000,"Telefonia Movil"])
         productos.append(["Monitor LG 256","Monitor",25,800000,"Computacion"])
 
-        cursor.execute("""DELETE FROM productos""")
+        cursor.execute('DELETE FROM productos')
         conexion.commit()
         
         for a,b,c,d,e in productos:
@@ -87,7 +88,7 @@ def agregar_Producto():
                 validadores.validaStr("Ingrese Nombre del producto: ",False)
                 ,validadores.validaStr("Ingrese Descripcion del producto: ", True)
                 ,validadores.validaInt("Ingrese Cantidad: ",0)
-                ,validadores.validaFloat("Precio (solo numeros sin centavos): ",0)
+                ,validadores.validaFloat("ingrese Precio: ",0)
                 ,validadores.validaStr("Ingrese Categoria del producto: ", True)
             )
         )
@@ -124,32 +125,32 @@ def actualizar_Producto():
             if index == 0: print("\033[31mERROR: Cancelado o No se encuentra el ID\031[0m")
             else:
                 menu.campos()
-                match validadores.validaInt("Indique que desea editar: ",-1,6): 
+                campo=''
+                aux=""
+                match validadores.validaInt("Indique que desea editar: ",-1,6):                                 
                     case 0:
                         print("-- 0. Salir")                        
                         break
                     case 1:
                         print("-- 1. Nombre")
-                        aux=validadores.validaStr("Ingrese Nombre: ",False)                               
-                        cursor.execute('UPDATE productos SET nombre = ? WHERE id = ?',(aux,id_actualizar))                       
+                        campo='nombre'
+                        aux=validadores.validaStr(f"Ingrese {campo}: ",False)
                     case 2:
                         print("-- 2. Descripcion")
-                        aux=validadores.validaStr("Ingrese Descripcion: ", True)                        
-                        cursor.execute('UPDATE productos SET descripcion = ? WHERE id = ?',(aux,id_actualizar))
+                        campo='descripcion'
+                        aux=validadores.validaStr(f"Ingrese {campo}: ", True)                        
                     case 3:
                         print("-- 3. Cantidad")
-                        aux=validadores.validaInt("Ingrese Cantidad: ",0)
-                        cursor.execute('UPDATE productos SET cantidad = ? WHERE id = ?',(aux,id_actualizar))
+                        campo='cantidad'
+                        aux=validadores.validaInt(f"Ingrese {campo}: ",-1)
                     case 4:
                         print("-- 4. Precio")
-                        aux=validadores.validaFloat("Ingrese Precio (solo numeros sin centavos): ",0)
-                        cursor.execute('UPDATE productos SET precio = ? WHERE id = ?',(aux,id_actualizar))
+                        campo='precio'
+                        aux=validadores.validaFloat(f"Ingrese {campo}: (solo numeros sin centavos): ",0)
                     case 5:
                         print("-- 5. Categoria")
-                        aux=validadores.validaStr("Ingrese Categoria: ", True)
-                        cursor.execute('UPDATE productos SET categoria = ? WHERE id = ?',(aux,id_actualizar))
-                #conexion.commit()
-                #cursor.execute('UPDATE productos SET ? = ? WHERE id = ?', (columna,aux,id_actualizar))
+                        campo='categoria'
+                cursor.execute(f'UPDATE productos SET {campo} = ? WHERE id = ?',(aux,id_actualizar))          
                 conexion.commit()
 
         print("\033[93m\n\nDesea Actualizar otro producto?: \033[0m")
@@ -166,7 +167,6 @@ def eliminar_Producto():
     """
     os.system('cls')
     print("-- 4. Eliminar producto")
-    conexion = sqlite3.connect("inventario.db")
     conexion = sqlite3.connect("inventario.db")
     cursor = conexion.cursor()
     while True:
@@ -203,30 +203,34 @@ def buscar_Producto():
         if len(productos) == 0: print("\033[31mTodavia no hay productos cargados.\033[0m")
         else:
             menu.campos()
-            match validadores.validaInt("Indique que porque dato desea buscar: ",-1,6): 
+            campo=''
+            aux=""
+            match validadores.validaInt("Indique que desea buscar: ",-1,6):                                 
                 case 0:
                     print("-- 0. Salir")                        
                     break
                 case 1:
                     print("-- 1. Nombre")
-                    aux=validadores.validaStr("Ingrese Nombre: ",False)
-                    cursor.execute('SELECT * FROM productos WHERE nombre = ?',(aux,))
+                    campo='nombre'
+                    aux=validadores.validaStr(f"Ingrese {campo}: ",False)
                 case 2:
                     print("-- 2. Descripcion")
-                    aux=validadores.validaStr("Ingrese Descripcion: ", True)
-                    cursor.execute('SELECT * FROM productos WHERE descripcion like "%?%"',(aux,))
+                    campo='descripcion'
+                    aux=validadores.validaStr(f"Ingrese {campo}: ", True)                        
                 case 3:
                     print("-- 3. Cantidad")
-                    aux=validadores.validaInt("Ingrese Cantidad: ",0)
-                    cursor.execute('SELECT * FROM productos WHERE cantidad like "%?%"',(aux,))
+                    campo='cantidad'
+                    aux=validadores.validaInt(f"Ingrese {campo}: ",-1)
                 case 4:
                     print("-- 4. Precio")
-                    aux=validadores.validaFloat("Ingrese Precio (solo numeros sin centavos): ",0)
-                    cursor.execute('SELECT * FROM productos WHERE precio like "%?%"',(aux,))
+                    campo='precio'
+                    aux=validadores.validaFloat(f"Ingrese {campo}: ",0)
                 case 5:
                     print("-- 5. Categoria")
-                    aux=validadores.validaStr("Ingrese Categoria: ", True)
-                    cursor.execute('SELECT * FROM productos WHERE categoria = ?',(aux,))
+                    campo='categoria'
+                    aux=validadores.validaStr(f"Ingrese {campo}: ", True)                        
+            if aux==None:cursor.execute(f'SELECT * FROM productos WHERE {campo} is NULL')
+            else: cursor.execute(f'SELECT * FROM productos WHERE {campo} LIKE ?',(f"%{aux}%",))
             productos = cursor.fetchall()
             if len(productos)!=0:
                 for producto in productos:
@@ -234,7 +238,6 @@ def buscar_Producto():
             else: print("\033[93mNo hay productos con esas Características.\n\033[0m")
         if(validadores.validaSN("\033[93mDesea buscar otro producto? S/N: \033[0m")=='n'):break
     conexion.close()
-
             
 def reporte_stock():
     """
@@ -256,12 +259,3 @@ def reporte_stock():
         for producto in productos:
             print(f"ID: {producto[0]}, Nombre: {producto[1]}, Descripcion: {producto[2]}, Cantidad: {producto[3]}, Precio: ${producto[4]:.2f}, Categoria: {producto[5]}")
     conexion.close()
-#cursor.execute(f'''
-#CREATE TABLE IF NOT EXISTS productos (
-#id INTEGER PRIMARY KEY AUTOINCREMENT,
-#nombre TEXT NOT NULL,
-#descripcion TEXT,
-#cantidad INTEGER NOT NULL,
-#precio REAL NOT NULL,
-#categoria TEXT)
-#''')
